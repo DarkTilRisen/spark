@@ -27,9 +27,10 @@ import org.apache.spark.annotation.Since
 import org.apache.spark.api.java.JavaRDD
 import org.apache.spark.internal.Logging
 import org.apache.spark.mllib.linalg.Vector
+import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.util.{Loader, Saveable}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 
 /**
  * Clustering model produced by [[BisectingKMeans]].
@@ -55,6 +56,16 @@ class BisectingKMeansModel private[clustering] (
    */
   @Since("1.6.0")
   def clusterCenters: Array[Vector] = root.leafNodes.map(_.center)
+
+  def clusterHierarchy: Array[Vector] =
+    root.allNodes.map(
+      x => Vectors.dense(
+        Array(
+          x._2.index.toDouble,
+          x._1.index.toDouble
+        ) ++ x._2.center.toArray
+      )
+    )
 
   /**
    * Number of leaf clusters.

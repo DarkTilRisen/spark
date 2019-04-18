@@ -18,7 +18,6 @@
 package org.apache.spark.ml.clustering
 
 import org.apache.hadoop.fs.Path
-
 import org.apache.spark.SparkException
 import org.apache.spark.annotation.{Experimental, Since}
 import org.apache.spark.ml.{Estimator, Model}
@@ -27,9 +26,9 @@ import org.apache.spark.ml.param._
 import org.apache.spark.ml.param.shared._
 import org.apache.spark.ml.util._
 import org.apache.spark.ml.util.Instrumentation.instrumented
-import org.apache.spark.mllib.clustering.{BisectingKMeans => MLlibBisectingKMeans,
-  BisectingKMeansModel => MLlibBisectingKMeansModel}
+import org.apache.spark.mllib.clustering.{BisectingKMeans => MLlibBisectingKMeans, BisectingKMeansModel => MLlibBisectingKMeansModel}
 import org.apache.spark.mllib.linalg.VectorImplicits._
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Dataset, Row}
 import org.apache.spark.sql.functions.udf
 import org.apache.spark.sql.types.{IntegerType, StructType}
@@ -121,6 +120,9 @@ class BisectingKMeansModel private[ml] (
 
   @Since("2.0.0")
   def clusterCenters: Array[Vector] = parentModel.clusterCenters.map(_.asML)
+
+  @Since("2.4.1")
+  def clusterHierarchy: Array[Vector] = parentModel.clusterHierarchy.map(_.asML)
 
   /**
    * Computes the sum of squared distances between the input points and their corresponding cluster

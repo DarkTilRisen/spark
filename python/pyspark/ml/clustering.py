@@ -535,6 +535,10 @@ class BisectingKMeansModel(JavaModel, JavaMLWritable, JavaMLReadable):
         """Get the cluster centers, represented as a list of NumPy arrays."""
         return [c.toArray() for c in self._call_java("clusterCenters")]
 
+    def hierarchy(self):
+        return [c.toArray() for c in self._call_java("clusterHierarchy")]
+
+
     @since("2.0.0")
     def computeCost(self, dataset):
         """

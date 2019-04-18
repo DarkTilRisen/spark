@@ -533,6 +533,18 @@ private[clustering] class ClusteringTreeNode private[clustering] (
     }
   }
 
+  private def allNodesRec(parent: ClusteringTreeNode):
+  Array[(ClusteringTreeNode, ClusteringTreeNode)] = {
+    if (isLeaf) {
+      Array((parent, this))
+    } else {
+      Array((parent, this)) ++ this.children.flatMap(_.allNodesRec(this))
+    }
+  }
+
+  def allNodes: Array[(ClusteringTreeNode, ClusteringTreeNode)] = {
+      this.allNodesRec(this)
+  }
   /**
    * Returns all leaf nodes from this node.
    */
